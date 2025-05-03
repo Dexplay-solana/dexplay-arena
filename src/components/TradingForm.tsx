@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "@/components/ui/use-toast";
-import { ArrowDown, ArrowUp, DollarSign } from "lucide-react";
+import { Coins, Wallet, TrendingUp } from "lucide-react";
 
 interface TradingFormProps {
   tokenSymbol: string;
@@ -16,13 +16,16 @@ interface TradingFormProps {
 
 export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
   const [orderType, setOrderType] = useState("market");
-  const [positionType, setPositionType] = useState("long");
+  const [marketDirection, setMarketDirection] = useState("bullish");
   const [amount, setAmount] = useState("100");
   const [leverage, setLeverage] = useState(2);
   
   // Calculated values
   const calculatedSize = parseFloat(amount) * leverage;
-  const liquidationPrice = positionType === "long" 
+  const estimatedYield = marketDirection === "bullish" 
+    ? (tokenPrice * 0.03 * leverage).toFixed(2)
+    : (tokenPrice * 0.02 * leverage).toFixed(2);
+  const riskLevel = marketDirection === "bullish" 
     ? tokenPrice * (1 - 1/leverage * 0.9) 
     : tokenPrice * (1 + 1/leverage * 0.9);
   
@@ -31,8 +34,8 @@ export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
     
     // Show a toast notification
     toast({
-      title: `${positionType === "long" ? "Long" : "Short"} position opened`,
-      description: `${calculatedSize.toFixed(2)} ${tokenSymbol} at $${tokenPrice}`,
+      title: `${marketDirection === "bullish" ? "Bullish" : "Bearish"} token stake placed`,
+      description: `${calculatedSize.toFixed(2)} ${tokenSymbol} staked at $${tokenPrice}`,
     });
     
     // Reset form
@@ -51,37 +54,37 @@ export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
         
         <TabsContent value="market" className="pt-4">
           <form onSubmit={handleSubmit}>
-            {/* Position type selection */}
+            {/* Market direction selection */}
             <div className="grid grid-cols-2 gap-2 mb-6">
               <Button 
                 type="button"
-                variant={positionType === "long" ? "default" : "outline"}
-                className={positionType === "long" 
+                variant={marketDirection === "bullish" ? "default" : "outline"}
+                className={marketDirection === "bullish" 
                   ? "bg-green-600 hover:bg-green-700 text-white" 
                   : "border-white/10 bg-black/40 text-white hover:border-green-600"
                 }
-                onClick={() => setPositionType("long")}
+                onClick={() => setMarketDirection("bullish")}
               >
-                <ArrowUp className="w-4 h-4 mr-2" />
-                Long
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Bullish Market
               </Button>
               <Button 
                 type="button"
-                variant={positionType === "short" ? "default" : "outline"}
-                className={positionType === "short" 
+                variant={marketDirection === "bearish" ? "default" : "outline"}
+                className={marketDirection === "bearish" 
                   ? "bg-red-600 hover:bg-red-700 text-white" 
                   : "border-white/10 bg-black/40 text-white hover:border-red-600"
                 }
-                onClick={() => setPositionType("short")}
+                onClick={() => setMarketDirection("bearish")}
               >
-                <ArrowDown className="w-4 h-4 mr-2" />
-                Short
+                <TrendingUp className="w-4 h-4 mr-2 rotate-180" />
+                Bearish Market
               </Button>
             </div>
             
             {/* Amount input */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-400 mb-2">Amount (SOL)</label>
+              <label className="block text-sm font-medium text-gray-400 mb-2">Stake Amount (SOL)</label>
               <div className="relative">
                 <Input
                   type="text"
@@ -89,7 +92,7 @@ export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
                   onChange={(e) => setAmount(e.target.value)}
                   className="pl-8 bg-black/40 border-white/10"
                 />
-                <DollarSign className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+                <Coins className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
               </div>
               <div className="flex justify-between mt-2">
                 <Button 
@@ -131,10 +134,10 @@ export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
               </div>
             </div>
             
-            {/* Leverage slider */}
+            {/* Leverage slider (now described as Yield Multiplier) */}
             <div className="mb-6">
               <div className="flex justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-400">Leverage</label>
+                <label className="block text-sm font-medium text-gray-400">Yield Multiplier</label>
                 <span className="text-white font-medium">{leverage}x</span>
               </div>
               <Slider
@@ -147,8 +150,8 @@ export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
                 className="mb-2"
               />
               <div className="flex justify-between text-xs text-gray-400">
-                <span>1x</span>
-                <span>20x</span>
+                <span>1x (Low Risk)</span>
+                <span>20x (High Risk)</span>
               </div>
             </div>
             
@@ -159,12 +162,16 @@ export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
                 <span className="text-white">${tokenPrice.toFixed(4)}</span>
               </div>
               <div className="flex justify-between mb-2">
-                <span className="text-gray-400">Size</span>
+                <span className="text-gray-400">Total Stake</span>
                 <span className="text-white">${calculatedSize.toFixed(2)}</span>
               </div>
+              <div className="flex justify-between mb-2">
+                <span className="text-gray-400">Est. Daily Yield</span>
+                <span className="text-white">${estimatedYield}</span>
+              </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">Liquidation Price</span>
-                <span className="text-white">${liquidationPrice.toFixed(4)}</span>
+                <span className="text-gray-400">Risk Level</span>
+                <span className="text-white">${riskLevel.toFixed(4)}</span>
               </div>
             </div>
             
@@ -172,19 +179,20 @@ export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
             <Button 
               type="submit" 
               className={`w-full ${
-                positionType === "long" 
+                marketDirection === "bullish" 
                   ? "bg-green-600 hover:bg-green-700" 
                   : "bg-red-600 hover:bg-red-700"
               }`}
             >
-              {positionType === "long" ? "Buy / Long" : "Sell / Short"}
+              <Wallet className="w-4 h-4 mr-2" />
+              {marketDirection === "bullish" ? "Stake Tokens (Bullish)" : "Stake Tokens (Bearish)"}
             </Button>
           </form>
         </TabsContent>
         
         <TabsContent value="limit" className="pt-4">
           <div className="text-center py-8 text-gray-400">
-            <p>Limit orders allow you to set a specific price</p>
+            <p>Limit orders allow you to set a specific staking price</p>
             <p className="mt-2">Coming soon</p>
           </div>
         </TabsContent>

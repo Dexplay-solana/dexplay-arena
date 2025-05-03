@@ -23,10 +23,10 @@ export default function Trading() {
       
       <div className="container mx-auto py-6 px-4">
         <h1 className="text-3xl font-bold text-white mb-2">
-          <span className="gradient-text">Token Trading</span>
+          <span className="gradient-text">Token Staking</span>
         </h1>
         <p className="text-gray-400 mb-6">
-          Trade game tokens on the Solana network with leverage
+          Stake game tokens on the Solana network to earn yield
         </p>
         
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
