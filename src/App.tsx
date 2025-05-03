@@ -4,9 +4,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
 import Livestreams from "./pages/Livestreams";
+import NotFound from "./pages/NotFound";
+import Trading from "./pages/Trading";
 
 const queryClient = new QueryClient();
 
@@ -17,11 +17,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Livestreams />} />
           <Route path="/livestreams" element={<Livestreams />} />
           <Route path="/cross-chain" element={<NotFound />} />
           <Route path="/stake" element={<NotFound />} />
-          <Route path="/trading" element={<NotFound />} />
+          <Route path="/trading" element={<Trading />} />
           <Route path="/p2p" element={<NotFound />} />
           <Route path="/nfts" element={<NotFound />} />
           <Route path="/leaderboard" element={<NotFound />} />
