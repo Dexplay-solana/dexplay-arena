@@ -65,7 +65,14 @@ const Index = () => {
                   tokenSymbol="DIO" 
                   tokenLogo={tokenLogo}
                 />
-                <StreamStats />
+                <StreamStats 
+                  viewers={1243}
+                  followers={58500}
+                  tokenPrice={5.32}
+                  priceChange={7.8}
+                  stakedTotal={25600}
+                  roi={12.4}
+                />
               </div>
               
               {/* Order Book */}
