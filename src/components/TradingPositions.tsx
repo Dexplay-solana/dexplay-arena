@@ -19,7 +19,7 @@ const generateMockPositions = (count = 3) => {
       : entryPrice * (1 - Math.random() * 0.3);
     const multiplier = Math.floor(Math.random() * 10) + 1;
     const size = parseFloat((Math.random() * 1000 + 100).toFixed(2));
-    const yield = isBullish 
+    const yieldValue = isBullish 
       ? (currentPrice - entryPrice) / entryPrice * 100 * multiplier
       : (entryPrice - currentPrice) / entryPrice * 100 * multiplier;
     
@@ -31,7 +31,7 @@ const generateMockPositions = (count = 3) => {
       entryPrice,
       currentPrice: currentPrice,
       stakeSize: size,
-      yieldReturn: parseFloat(yield.toFixed(2)),
+      yieldReturn: parseFloat(yieldValue.toFixed(2)),
       riskLevel: isBullish
         ? entryPrice * (1 - 1/multiplier * 0.9)
         : entryPrice * (1 + 1/multiplier * 0.9),
