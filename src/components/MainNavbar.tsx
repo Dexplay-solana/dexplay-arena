@@ -1,11 +1,9 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { GamepadIcon, UserIcon, Menu, X } from "lucide-react";
 
 const NavItems = [
-  { name: "Home", path: "/" },
   { name: "Livestreams", path: "/livestreams" },
   { name: "Cross Chain", path: "/cross-chain" },
   { name: "Stake", path: "/stake" },

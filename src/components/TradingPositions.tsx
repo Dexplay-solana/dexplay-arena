@@ -26,15 +26,12 @@ const generateMockPositions = (count = 3) => {
     positions.push({
       id: `pos-${i}`,
       symbol: tokens[i % tokens.length],
-      marketView: isBullish ? "bullish" : "bearish",
       multiplier: `${multiplier}x`,
       entryPrice,
       currentPrice: currentPrice,
       stakeSize: size,
       yieldReturn: parseFloat(yieldValue.toFixed(2)),
-      riskLevel: isBullish
-        ? entryPrice * (1 - 1/multiplier * 0.9)
-        : entryPrice * (1 + 1/multiplier * 0.9),
+      pnl: parseFloat((size * yieldValue / 100).toFixed(2)),
     });
   }
   
@@ -44,13 +41,12 @@ const generateMockPositions = (count = 3) => {
 interface Position {
   id: string;
   symbol: string;
-  marketView: "bullish" | "bearish";
   multiplier: string;
   entryPrice: number;
   currentPrice: number;
   stakeSize: number;
   yieldReturn: number;
-  riskLevel: number;
+  pnl: number;
 }
 
 export function TradingPositions() {
@@ -63,13 +59,14 @@ export function TradingPositions() {
     
     // Show toast
     toast({
-      title: `Tokens withdrawn from ${position.marketView === "bullish" ? "bullish" : "bearish"} stake`,
+      title: `Tokens withdrawn from stake`,
       description: `${position.symbol} ${position.stakeSize.toFixed(2)} with ${position.yieldReturn >= 0 ? "yield" : "loss"} of ${position.yieldReturn}%`,
     });
   };
   
   return (
     <Card className="bg-black/20 backdrop-blur-sm border border-white/10 p-6">
+      <h2 className="text-xl font-bold text-white mb-4">Your Positions</h2>
       <Tabs defaultValue="positions" className="w-full">
         <TabsList className="grid w-full grid-cols-2 bg-black/40">
           <TabsTrigger value="positions" className="data-[state=active]:bg-dexplay-purple">Active Stakes</TabsTrigger>
@@ -84,11 +81,6 @@ export function TradingPositions() {
                   <div key={position.id} className="bg-black/40 rounded-lg p-4">
                     <div className="flex justify-between items-center mb-3">
                       <div className="flex items-center">
-                        <span className={`px-2 py-1 rounded text-xs mr-2 ${
-                          position.marketView === "bullish" ? "bg-green-600/20 text-green-400" : "bg-red-600/20 text-red-400"
-                        }`}>
-                          {position.marketView.toUpperCase()}
-                        </span>
                         <span className="font-medium text-white">{position.symbol}</span>
                         <span className="ml-2 text-gray-400 text-sm">{position.multiplier}</span>
                       </div>
@@ -127,6 +119,17 @@ export function TradingPositions() {
                         </p>
                       </div>
                     </div>
+                    
+                    <div className="mt-2 pt-2 border-t border-white/10">
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm text-white font-medium">PNL</p>
+                        <p className={`text-lg font-bold ${
+                          position.pnl >= 0 ? "text-green-400" : "text-red-400"
+                        }`}>
+                          {position.pnl >= 0 ? "+" : ""}${Math.abs(position.pnl).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -146,11 +149,6 @@ export function TradingPositions() {
                 <div key={stake.id} className="bg-black/40 rounded-lg p-4">
                   <div className="flex justify-between items-center mb-3">
                     <div className="flex items-center">
-                      <span className={`px-2 py-1 rounded text-xs mr-2 ${
-                        stake.marketView === "bullish" ? "bg-green-600/20 text-green-400" : "bg-red-600/20 text-red-400"
-                      }`}>
-                        {stake.marketView.toUpperCase()}
-                      </span>
                       <span className="font-medium text-white">{stake.symbol}</span>
                       <span className="ml-2 text-gray-400 text-sm">{stake.multiplier}</span>
                     </div>
@@ -174,11 +172,11 @@ export function TradingPositions() {
                       <p className="text-sm text-white">${stake.stakeSize.toFixed(2)}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400">Yield</p>
+                      <p className="text-xs text-gray-400">Final PNL</p>
                       <p className={`text-sm font-medium ${
-                        stake.yieldReturn >= 0 ? "text-green-400" : "text-red-400"
+                        stake.pnl >= 0 ? "text-green-400" : "text-red-400"
                       }`}>
-                        {stake.yieldReturn >= 0 ? "+" : ""}{stake.yieldReturn}%
+                        {stake.pnl >= 0 ? "+" : ""}${Math.abs(stake.pnl).toFixed(2)} ({stake.yieldReturn}%)
                       </p>
                     </div>
                   </div>

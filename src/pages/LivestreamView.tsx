@@ -3,11 +3,12 @@ import { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { MainNavbar } from "@/components/MainNavbar";
 import { StreamPlayer } from "@/components/StreamPlayer";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { StreamChat } from "@/components/StreamChat";
 import { TradingForm } from "@/components/TradingForm";
-import { OrderBook } from "@/components/OrderBook";
 import { Coins, MessageSquare } from "lucide-react";
+import { TradingPositions } from "@/components/TradingPositions";
+import { StreamEngagementChart } from "@/components/StreamEngagementChart";
+import { StreamTransactions } from "@/components/StreamTransactions";
 
 export default function LivestreamView() {
   const { id } = useParams();
@@ -28,6 +29,7 @@ export default function LivestreamView() {
   };
   
   const [activeTab, setActiveTab] = useState<"chat" | "trade">("chat");
+  const [tradeTab, setTradeTab] = useState<"stake" | "chartbot" | "transactions">("stake");
   
   const tokenData = {
     symbol: `${stream.game}/SOL`,
@@ -70,6 +72,11 @@ export default function LivestreamView() {
                 </span>
               ))}
             </div>
+
+            {/* Trading Positions */}
+            <div className="mb-6">
+              <TradingPositions />
+            </div>
           </div>
           
           {/* Sidebar for chat/trading */}
@@ -94,29 +101,66 @@ export default function LivestreamView() {
               
               <div className="p-4">
                 {activeTab === "chat" ? (
-                  <div className="h-[500px] overflow-y-auto">
-                    <div className="text-center text-gray-400 py-4">
-                      <p>Chat functionality will be added soon!</p>
-                    </div>
+                  <div className="h-[500px]">
+                    <StreamChat />
                   </div>
                 ) : (
                   <div>
-                    <div className="mb-4">
-                      <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-white font-medium">{tokenData.symbol}</h3>
-                        <div className="text-right">
-                          <div className="text-xl font-bold text-white">${tokenData.price}</div>
-                          <div className={tokenData.change24h >= 0 ? "text-green-500" : "text-red-500"}>
-                            {tokenData.change24h >= 0 ? "+" : ""}{tokenData.change24h}%
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <TradingForm
-                        tokenSymbol={tokenData.symbol}
-                        tokenPrice={tokenData.price}
-                      />
+                    {/* Trade tabs */}
+                    <div className="flex mb-4 bg-black/40 rounded-md p-1">
+                      <button
+                        className={`flex-1 py-2 text-sm rounded ${tradeTab === "stake" ? "bg-dexplay-purple text-white" : "text-gray-400 hover:bg-black/20"}`}
+                        onClick={() => setTradeTab("stake")}
+                      >
+                        Stake
+                      </button>
+                      <button
+                        className={`flex-1 py-2 text-sm rounded ${tradeTab === "chartbot" ? "bg-dexplay-purple text-white" : "text-gray-400 hover:bg-black/20"}`}
+                        onClick={() => setTradeTab("chartbot")}
+                      >
+                        ChartBot
+                      </button>
+                      <button
+                        className={`flex-1 py-2 text-sm rounded ${tradeTab === "transactions" ? "bg-dexplay-purple text-white" : "text-gray-400 hover:bg-black/20"}`}
+                        onClick={() => setTradeTab("transactions")}
+                      >
+                        Transactions
+                      </button>
                     </div>
+                    
+                    {/* Tab content */}
+                    {tradeTab === "stake" && (
+                      <>
+                        <div className="mb-4">
+                          <div className="flex justify-between items-center mb-2">
+                            <h3 className="text-white font-medium">{tokenData.symbol}</h3>
+                            <div className="text-right">
+                              <div className="text-xl font-bold text-white">${tokenData.price}</div>
+                              <div className={tokenData.change24h >= 0 ? "text-green-500" : "text-red-500"}>
+                                {tokenData.change24h >= 0 ? "+" : ""}{tokenData.change24h}%
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <TradingForm
+                            tokenSymbol={tokenData.symbol}
+                            tokenPrice={tokenData.price}
+                          />
+                        </div>
+                      </>
+                    )}
+                    
+                    {tradeTab === "chartbot" && (
+                      <div className="h-[400px]">
+                        <StreamEngagementChart streamId={stream.id} />
+                      </div>
+                    )}
+                    
+                    {tradeTab === "transactions" && (
+                      <div className="h-[400px]">
+                        <StreamTransactions streamId={stream.id} />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
