@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MainNavbar } from "@/components/MainNavbar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -131,6 +130,7 @@ interface GameStreamCardProps {
 }
 
 const GameStreamCard = ({ id, title, game, network, thumbnail, creator, tags, viewers, scheduledTime }: GameStreamCardProps) => {
+  const navigate = useNavigate();
   const isLive = !!viewers;
 
   const formatScheduledTime = (timeString: string) => {
@@ -143,8 +143,18 @@ const GameStreamCard = ({ id, title, game, network, thumbnail, creator, tags, vi
     });
   };
 
+  const handleWatchClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isLive) {
+      navigate(`/livestream/${id}`, { state: { stream: { id, title, game, network, thumbnail, creator, tags, viewers } } });
+    } else {
+      // Set reminder logic would go here
+      console.log(`Set reminder for scheduled stream: ${id}`);
+    }
+  };
+
   return (
-    <Link to={isLive ? `/?creator=${id}` : `#scheduled-${id}`} className="block">
+    <div className="block">
       <Card className="overflow-hidden border-white/10 bg-black/40 transition-all hover:border-dexplay-purple hover:card-glow">
         <div className="relative">
           <img 
@@ -174,7 +184,10 @@ const GameStreamCard = ({ id, title, game, network, thumbnail, creator, tags, vi
           )}
           
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-            <Button className="bg-dexplay-purple hover:bg-dexplay-brightPurple">
+            <Button 
+              className="bg-dexplay-purple hover:bg-dexplay-brightPurple"
+              onClick={handleWatchClick}
+            >
               <Play className="mr-1 h-4 w-4" />
               {isLive ? 'Watch Now' : 'Set Reminder'}
             </Button>
@@ -197,7 +210,7 @@ const GameStreamCard = ({ id, title, game, network, thumbnail, creator, tags, vi
           </div>
         </CardContent>
       </Card>
-    </Link>
+    </div>
   );
 };
 

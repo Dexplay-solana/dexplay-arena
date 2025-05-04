@@ -13,9 +13,13 @@ interface Order {
   timestamp: Date;
 }
 
-export function OrderBook() {
+interface OrderBookProps {
+  defaultTab?: "orders" | "trades";
+}
+
+export function OrderBook({ defaultTab = "orders" }: OrderBookProps) {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [activeTab, setActiveTab] = useState("orders");
+  const [activeTab, setActiveTab] = useState(defaultTab);
 
   // Generate mock order data
   useEffect(() => {
@@ -80,7 +84,7 @@ export function OrderBook() {
         </div>
       </div>
       
-      <Tabs defaultValue="orders" className="w-full" onValueChange={setActiveTab}>
+      <Tabs defaultValue={defaultTab} className="w-full" onValueChange={(value) => setActiveTab(value as "orders" | "trades")}>
         <div className="px-4 pt-2">
           <TabsList className="w-full bg-black/20">
             <TabsTrigger value="orders" className="flex-1 data-[state=active]:bg-dexplay-purple/20">

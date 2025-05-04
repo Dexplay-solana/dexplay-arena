@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Livestreams from "./pages/Livestreams";
+import LivestreamView from "./pages/LivestreamView";
 import NotFound from "./pages/NotFound";
 import Trading from "./pages/Trading";
 
@@ -19,6 +20,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Livestreams />} />
           <Route path="/livestreams" element={<Livestreams />} />
+          <Route path="/livestream/:id" element={<LivestreamView />} />
           <Route path="/cross-chain" element={<NotFound />} />
           <Route path="/stake" element={<NotFound />} />
           <Route path="/trading" element={<Trading />} />

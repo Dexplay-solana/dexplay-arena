@@ -12,9 +12,10 @@ import { Coins, Wallet, TrendingUp } from "lucide-react";
 interface TradingFormProps {
   tokenSymbol: string;
   tokenPrice: number;
+  compact?: boolean;
 }
 
-export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
+export function TradingForm({ tokenSymbol, tokenPrice, compact = false }: TradingFormProps) {
   const [orderType, setOrderType] = useState("market");
   const [marketDirection, setMarketDirection] = useState("bullish");
   const [amount, setAmount] = useState("100");
@@ -42,7 +43,84 @@ export function TradingForm({ tokenSymbol, tokenPrice }: TradingFormProps) {
     setAmount("100");
     setLeverage(2);
   };
+
+  // For compact mobile view
+  if (compact) {
+    return (
+      <form onSubmit={handleSubmit} className="bg-black/40 backdrop-blur-sm rounded-lg p-3">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex-1">
+            <div className="text-sm font-medium text-white">${tokenPrice.toFixed(4)}</div>
+            <div className={`text-xs ${marketDirection === "bullish" ? "text-green-500" : "text-red-500"}`}>
+              {marketDirection === "bullish" ? "Bullish" : "Bearish"} Market
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-1">
+            <Button 
+              type="button"
+              variant={marketDirection === "bullish" ? "default" : "outline"}
+              size="sm"
+              className={marketDirection === "bullish" 
+                ? "bg-green-600 hover:bg-green-700 text-white" 
+                : "border-white/10 bg-black/40 text-white hover:border-green-600"
+              }
+              onClick={() => setMarketDirection("bullish")}
+            >
+              <TrendingUp className="w-4 h-4" />
+            </Button>
+            <Button 
+              type="button"
+              variant={marketDirection === "bearish" ? "default" : "outline"}
+              size="sm"
+              className={marketDirection === "bearish" 
+                ? "bg-red-600 hover:bg-red-700 text-white" 
+                : "border-white/10 bg-black/40 text-white hover:border-red-600"
+              }
+              onClick={() => setMarketDirection("bearish")}
+            >
+              <TrendingUp className="w-4 h-4 rotate-180" />
+            </Button>
+          </div>
+          
+          <div className="flex items-center ml-3">
+            <Input
+              type="text"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="w-24 bg-black/40 border-white/10 h-9"
+              placeholder="Amount"
+            />
+            <Button 
+              type="submit" 
+              className={`ml-1.5 ${
+                marketDirection === "bullish" 
+                  ? "bg-green-600 hover:bg-green-700" 
+                  : "bg-red-600 hover:bg-red-700"
+              }`}
+            >
+              Stake
+            </Button>
+          </div>
+        </div>
+        
+        <div className="flex items-center">
+          <span className="text-xs text-gray-400 mr-2">Yield Multiplier: {leverage}x</span>
+          <div className="flex-1">
+            <Slider
+              value={[leverage]}
+              min={1}
+              max={20}
+              step={1}
+              onValueChange={(values) => setLeverage(values[0])}
+            />
+          </div>
+        </div>
+      </form>
+    );
+  }
   
+  // Standard desktop version
   return (
     <Card className="bg-black/20 backdrop-blur-sm border border-white/10 p-6">
       <Tabs defaultValue="market" onValueChange={setOrderType} className="w-full">
