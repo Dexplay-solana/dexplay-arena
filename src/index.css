@@ -114,3 +114,26 @@
     opacity: 0;
   }
 }
+
+/* Pulse animation for staking rewards */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s infinite;
+}
+
+/* Glass effect for cards */
+.glass-effect {
+  backdrop-filter: blur(8px);
+  background-color: rgba(26, 31, 44, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

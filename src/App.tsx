@@ -11,6 +11,8 @@ import Trading from "./pages/Trading";
 import P2P from "./pages/P2P";
 import P2PNfts from "./pages/P2PNfts";
 import CrossGameNfts from "./pages/CrossGameNfts";
+import CrossChain from "./pages/CrossChain";
+import Staking from "./pages/Staking";
 
 const queryClient = new QueryClient();
 
@@ -24,8 +26,8 @@ const App = () => (
           <Route path="/" element={<Livestreams />} />
           <Route path="/livestreams" element={<Livestreams />} />
           <Route path="/livestream/:id" element={<LivestreamView />} />
-          <Route path="/cross-chain" element={<NotFound />} />
-          <Route path="/stake" element={<NotFound />} />
+          <Route path="/cross-chain" element={<CrossChain />} />
+          <Route path="/stake" element={<Staking />} />
           <Route path="/trading" element={<Trading />} />
           <Route path="/p2p" element={<P2P />} />
           <Route path="/p2p/nfts" element={<P2PNfts />} />
