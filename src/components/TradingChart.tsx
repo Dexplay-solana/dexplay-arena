@@ -1,9 +1,11 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Mock data for the chart
 const generateChartData = (days = 30, startPrice = 5.32, volatility = 0.05) => {
@@ -32,6 +34,7 @@ interface TradingChartProps {
 export function TradingChart({ tokenSymbol }: TradingChartProps) {
   const [timeframe, setTimeframe] = useState("1D");
   const [chartData, setChartData] = useState(() => generateChartData());
+  const isMobile = useIsMobile();
   
   const timeframes = ["15m", "1H", "4H", "1D", "1W", "1M"];
   
@@ -74,34 +77,57 @@ export function TradingChart({ tokenSymbol }: TradingChartProps) {
     setChartData(generateChartData(days, 5.32, volatility));
   };
   
+  // Chart configuration
+  const chartConfig = {
+    price: {
+      theme: {
+        light: "#9b87f5",
+        dark: "#9b87f5",
+      },
+    },
+  };
+  
   return (
     <Card className="bg-transparent border-0">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex space-x-2">
+      <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 mb-2 sm:mb-4">
+        {/* Timeframe buttons - scrollable on mobile */}
+        <div className="flex overflow-x-auto pb-2 sm:pb-0 sm:space-x-2 gap-2 no-scrollbar">
           {timeframes.map((tf) => (
             <Button
               key={tf}
               variant={timeframe === tf ? "default" : "outline"} 
-              size="sm"
+              size={isMobile ? "xs" : "sm"}
               onClick={() => updateTimeframe(tf)}
-              className={timeframe === tf ? "bg-dexplay-purple hover:bg-dexplay-brightPurple" : "border-white/10 bg-black/40"}
+              className={`min-w-[40px] whitespace-nowrap ${timeframe === tf 
+                ? "bg-dexplay-purple hover:bg-dexplay-brightPurple" 
+                : "border-white/10 bg-black/40"}`}
             >
               {tf}
             </Button>
           ))}
         </div>
-        <div>
-          <Button variant="outline" size="sm" className="border-white/10 bg-black/40">
+        
+        {/* Indicators button */}
+        <div className="ml-auto">
+          <Button 
+            variant="outline" 
+            size={isMobile ? "xs" : "sm"} 
+            className="border-white/10 bg-black/40"
+          >
             Indicators
           </Button>
         </div>
       </div>
       
-      <div className="h-[400px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+      {/* Responsive chart container */}
+      <div className={`${isMobile ? 'h-[250px]' : 'h-[400px]'} w-full`}>
+        <ChartContainer config={chartConfig} className="w-full h-full">
           <AreaChart
             data={chartData}
-            margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+            margin={isMobile ? 
+              { top: 5, right: 5, left: 0, bottom: 5 } : 
+              { top: 5, right: 20, left: 20, bottom: 5 }
+            }
           >
             <defs>
               <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
@@ -115,6 +141,10 @@ export function TradingChart({ tokenSymbol }: TradingChartProps) {
               tick={{ fill: '#8E9196' }} 
               tickLine={{ stroke: '#8E9196' }}
               axisLine={{ stroke: '#2a2a3c' }}
+              tickFormatter={isMobile ? 
+                (value) => value.split('-')[2] : // Just show day on mobile
+                (value) => value}
+              fontSize={isMobile ? 10 : 12}
             />
             <YAxis 
               domain={['auto', 'auto']} 
@@ -122,12 +152,15 @@ export function TradingChart({ tokenSymbol }: TradingChartProps) {
               tickLine={{ stroke: '#8E9196' }}
               axisLine={{ stroke: '#2a2a3c' }}
               tickFormatter={(value) => `$${value}`}
+              width={isMobile ? 35 : 50}
+              fontSize={isMobile ? 10 : 12}
             />
-            <Tooltip 
-              contentStyle={{ backgroundColor: '#1A1F2C', border: '1px solid #2a2a3c' }} 
-              labelStyle={{ color: '#fff' }}
-              formatter={(value) => [`$${value}`, tokenSymbol]}
-              labelFormatter={(label) => `Date: ${label}`}
+            <ChartTooltip 
+              content={
+                <ChartTooltipContent 
+                  formatter={(value) => [`$${value}`, tokenSymbol]} 
+                />
+              }
             />
             <Area 
               type="monotone" 
@@ -135,10 +168,34 @@ export function TradingChart({ tokenSymbol }: TradingChartProps) {
               stroke="#9b87f5" 
               fillOpacity={1}
               fill="url(#colorPrice)" 
+              dot={false}
+              activeDot={{ r: 4 }}
             />
           </AreaChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       </div>
+      
+      {/* Price statistics - only visible on larger screens */}
+      {!isMobile && (
+        <div className="grid grid-cols-4 gap-4 mt-4 text-center">
+          <div className="bg-black/20 rounded p-2">
+            <div className="text-xs text-gray-400">24h High</div>
+            <div className="text-sm font-medium">$5.67</div>
+          </div>
+          <div className="bg-black/20 rounded p-2">
+            <div className="text-xs text-gray-400">24h Low</div>
+            <div className="text-sm font-medium">$5.12</div>
+          </div>
+          <div className="bg-black/20 rounded p-2">
+            <div className="text-xs text-gray-400">24h Vol</div>
+            <div className="text-sm font-medium">1.2M</div>
+          </div>
+          <div className="bg-black/20 rounded p-2">
+            <div className="text-xs text-gray-400">Market Cap</div>
+            <div className="text-sm font-medium">$45.6M</div>
+          </div>
+        </div>
+      )}
     </Card>
   );
 }
