@@ -1,5 +1,6 @@
+
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { GamepadIcon, UserIcon, Menu, X } from "lucide-react";
 
@@ -18,6 +19,7 @@ const NavItems = [
 
 export function MainNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-dexplay-darkPurple/90 backdrop-blur-sm border-b border-white/10">
@@ -36,7 +38,11 @@ export function MainNavbar() {
               <Link
                 key={item.name}
                 to={item.path}
-                className="text-gray-300 hover:text-dexplay-purple px-2 py-1 text-sm rounded-md transition-colors"
+                className={`px-2 py-1 text-sm rounded-md transition-colors ${
+                  location.pathname.startsWith(item.path)
+                    ? "text-dexplay-purple"
+                    : "text-gray-300 hover:text-dexplay-purple"
+                }`}
               >
                 {item.name}
               </Link>
@@ -77,7 +83,11 @@ export function MainNavbar() {
               <Link
                 key={item.name}
                 to={item.path}
-                className="text-gray-300 hover:text-dexplay-purple block px-3 py-2 rounded-md text-base font-medium"
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  location.pathname.startsWith(item.path)
+                    ? "text-dexplay-purple"
+                    : "text-gray-300 hover:text-dexplay-purple"
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
