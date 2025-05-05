@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,10 +15,10 @@ import {
 } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function P2PFilterBar() {
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFiat, setSelectedFiat] = useState("USD");
   const [selectedPayments, setSelectedPayments] = useState<string[]>(["Bank Transfer"]);
