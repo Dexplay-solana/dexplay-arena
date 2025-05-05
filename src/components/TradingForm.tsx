@@ -12,9 +12,10 @@ interface TradingFormProps {
   tokenSymbol: string;
   tokenPrice: number;
   compact?: boolean;
+  onStakeComplete?: () => void;
 }
 
-export function TradingForm({ tokenSymbol, tokenPrice, compact = false }: TradingFormProps) {
+export function TradingForm({ tokenSymbol, tokenPrice, compact = false, onStakeComplete }: TradingFormProps) {
   const [amount, setAmount] = useState("100");
   const [leverage, setLeverage] = useState(2);
   
@@ -35,6 +36,11 @@ export function TradingForm({ tokenSymbol, tokenPrice, compact = false }: Tradin
     // Reset form
     setAmount("100");
     setLeverage(2);
+    
+    // Notify parent component that stake is complete
+    if (onStakeComplete) {
+      onStakeComplete();
+    }
   };
 
   // For compact mobile view

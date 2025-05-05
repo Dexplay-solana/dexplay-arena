@@ -20,6 +20,7 @@ export default function Trading() {
     roi: 12.4,
   });
   
+  const [showStakeForm, setShowStakeForm] = useState(false);
   const [mobileView, setMobileView] = useState<"chart" | "orderbook" | "history" | "positions">("chart");
   const [isMobile, setIsMobile] = useState(false);
 
@@ -36,6 +37,17 @@ export default function Trading() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  // Handle token selection
+  const handleTokenSelect = (token) => {
+    setSelectedToken(token);
+    setShowStakeForm(true);
+  };
+
+  // Handle stake completion
+  const handleStakeComplete = () => {
+    setShowStakeForm(false);
+  };
 
   return (
     <div className="min-h-screen bg-dexplay-darkPurple">
@@ -54,7 +66,7 @@ export default function Trading() {
           <div className="lg:col-span-1">
             <TokenList 
               selectedToken={selectedToken.symbol} 
-              onSelectToken={setSelectedToken} 
+              onSelectToken={handleTokenSelect} 
             />
           </div>
           
@@ -137,8 +149,14 @@ export default function Trading() {
                     {/* Order book */}
                     <OrderBook />
                     
-                    {/* Order form */}
-                    <TradingForm tokenSymbol={selectedToken.symbol} tokenPrice={selectedToken.price} />
+                    {/* Order form - conditionally rendered */}
+                    {showStakeForm && (
+                      <TradingForm 
+                        tokenSymbol={selectedToken.symbol} 
+                        tokenPrice={selectedToken.price} 
+                        onStakeComplete={handleStakeComplete}
+                      />
+                    )}
                   </div>
                   
                   {/* Right column - Positions */}
@@ -162,10 +180,15 @@ export default function Trading() {
                 </div>
               )}
               
-              {/* Mobile trading form always visible at bottom */}
-              {isMobile && (
+              {/* Mobile trading form conditionally rendered */}
+              {isMobile && showStakeForm && (
                 <div className="fixed bottom-0 left-0 right-0 bg-dexplay-darkPurple border-t border-white/10 p-4 z-10">
-                  <TradingForm tokenSymbol={selectedToken.symbol} tokenPrice={selectedToken.price} compact={true} />
+                  <TradingForm 
+                    tokenSymbol={selectedToken.symbol} 
+                    tokenPrice={selectedToken.price} 
+                    compact={true}
+                    onStakeComplete={handleStakeComplete}
+                  />
                 </div>
               )}
             </div>
