@@ -14,6 +14,8 @@ import CrossGameNfts from "./pages/CrossGameNfts";
 import CrossChain from "./pages/CrossChain";
 import Staking from "./pages/Staking";
 import TokenCreation from "./pages/TokenCreation";
+import Leaderboard from "./pages/Leaderboard";
+import About from "./pages/About";
 
 const queryClient = new QueryClient();
 
@@ -35,10 +37,10 @@ const App = () => (
           <Route path="/p2p/nfts" element={<P2PNfts />} />
           <Route path="/p2p/cross-game" element={<CrossGameNfts />} />
           <Route path="/nfts" element={<NotFound />} />
-          <Route path="/leaderboard" element={<NotFound />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/competitions" element={<NotFound />} />
           <Route path="/token-creation" element={<TokenCreation />} />
-          <Route path="/about" element={<NotFound />} />
+          <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
