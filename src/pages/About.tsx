@@ -286,38 +286,7 @@ export default function About() {
           </Tabs>
         </motion.div>
 
-        {/* Stats Section */}
-        <motion.div 
-          variants={fadeIn}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center"
-        >
-          <Card className="bg-black/40 border-white/10">
-            <CardContent className="p-6">
-              <h3 className="text-4xl font-bold text-dexplay-purple mb-2">15+</h3>
-              <p className="text-white">Games Tokenized</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-black/40 border-white/10">
-            <CardContent className="p-6">
-              <h3 className="text-4xl font-bold text-dexplay-purple mb-2">100k+</h3>
-              <p className="text-white">Active Players</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-black/40 border-white/10">
-            <CardContent className="p-6">
-              <h3 className="text-4xl font-bold text-dexplay-purple mb-2">$5M+</h3>
-              <p className="text-white">Trading Volume</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-black/40 border-white/10">
-            <CardContent className="p-6">
-              <h3 className="text-4xl font-bold text-dexplay-purple mb-2">4</h3>
-              <p className="text-white">Blockchains</p>
-            </CardContent>
-          </Card>
-        </motion.div>
+        {/* Stats section removed as requested */}
       </div>
     </div>
   );

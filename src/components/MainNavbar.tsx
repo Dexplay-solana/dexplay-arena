@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { GamepadIcon, UserIcon, Menu, X } from "lucide-react";
+import { GamepadIcon, BarChart, Menu, X } from "lucide-react";
 
 const NavItems = [
   { name: "Livestreams", path: "/livestreams" },
@@ -53,9 +53,9 @@ export function MainNavbar() {
             <Button variant="outline" className="hidden sm:flex border-dexplay-purple text-dexplay-purple hover:bg-dexplay-purple/20">
               Connect Wallet
             </Button>
-            <Button variant="default" className="hidden sm:flex bg-dexplay-purple hover:bg-dexplay-brightPurple text-white">
-              <UserIcon className="mr-2 h-4 w-4" />
-              Sign In
+            <Button variant="default" className="hidden sm:flex bg-dexplay-purple hover:bg-dexplay-brightPurple text-white" as={Link} to="/dashboard">
+              <BarChart className="mr-2 h-4 w-4" />
+              Dashboard
             </Button>
             
             {/* Mobile menu button */}
@@ -97,9 +97,9 @@ export function MainNavbar() {
               <Button variant="outline" className="border-dexplay-purple text-dexplay-purple hover:bg-dexplay-purple/20 w-full">
                 Connect Wallet
               </Button>
-              <Button variant="default" className="bg-dexplay-purple hover:bg-dexplay-brightPurple text-white w-full">
-                <UserIcon className="mr-2 h-4 w-4" />
-                Sign In
+              <Button variant="default" className="bg-dexplay-purple hover:bg-dexplay-brightPurple text-white w-full" as={Link} to="/dashboard">
+                <BarChart className="mr-2 h-4 w-4" />
+                Dashboard
               </Button>
             </div>
           </div>
