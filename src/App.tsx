@@ -28,6 +28,7 @@ const App = () => (
           <Route path="/livestream/:id" element={<LivestreamView />} />
           <Route path="/cross-chain" element={<CrossChain />} />
           <Route path="/stake" element={<Staking />} />
+          <Route path="/staking" element={<Staking />} />
           <Route path="/trading" element={<Trading />} />
           <Route path="/p2p" element={<P2P />} />
           <Route path="/p2p/nfts" element={<P2PNfts />} />

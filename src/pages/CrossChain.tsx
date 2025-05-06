@@ -39,10 +39,10 @@ export default function CrossChain() {
       
       <div className="container mx-auto py-6 px-4">
         <h1 className="text-3xl font-bold text-white mb-2">
-          <span className="gradient-text">Cross-Chain Exchange</span>
+          <span className="gradient-text">Solana Token Exchange</span>
         </h1>
         <p className="text-gray-400 mb-6">
-          Swap tokens across different blockchains and game ecosystems
+          Swap tokens within the Solana ecosystem and between game environments
         </p>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -62,12 +62,12 @@ export default function CrossChain() {
         </div>
         
         <div className="mt-12 bg-black/20 backdrop-blur-sm border border-white/10 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">About Cross-Chain Exchange</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">About Solana Token Exchange</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-dexplay-purple">Seamless Token Swaps</h3>
+              <h3 className="text-xl font-semibold text-dexplay-purple">Fast Token Swaps</h3>
               <p className="text-gray-400">
-                Exchange tokens across different blockchains with low fees and fast transaction times. Supporting Solana, Ethereum, Polygon, and more.
+                Exchange tokens within the Solana ecosystem with low fees and lightning-fast transaction times, typically under 2 seconds.
               </p>
             </div>
             <div className="space-y-2">
@@ -79,7 +79,7 @@ export default function CrossChain() {
             <div className="space-y-2">
               <h3 className="text-xl font-semibold text-dexplay-purple">Secure Transactions</h3>
               <p className="text-gray-400">
-                All cross-chain operations are secured by smart contracts and multi-signature protocols to ensure the safety of your assets.
+                All operations are secured by Solana's high-performance blockchain and multi-signature protocols to ensure the safety of your assets.
               </p>
             </div>
           </div>

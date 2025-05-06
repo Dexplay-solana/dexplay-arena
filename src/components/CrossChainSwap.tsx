@@ -7,32 +7,24 @@ import { ArrowDown, Wallet } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/sonner";
 
-// Mock data for demonstration
+// Mock data for demonstration - Only Solana-based tokens
 const CHAINS = [
   { id: "solana", name: "Solana", icon: "🔵" },
-  { id: "ethereum", name: "Ethereum", icon: "🟣" },
-  { id: "polygon", name: "Polygon", icon: "🟪" },
-  { id: "avalanche", name: "Avalanche", icon: "🔴" },
-  { id: "binance", name: "Binance Smart Chain", icon: "🟡" },
 ];
 
 const TOKENS = [
   { id: "sol", name: "SOL", chain: "solana", balance: 4.32, icon: "🔵" },
   { id: "dio", name: "DIO", chain: "solana", balance: 142.7, icon: "🎮" },
   { id: "cave", name: "CAVE", chain: "solana", balance: 543.2, icon: "🏔️" },
-  { id: "eth", name: "ETH", chain: "ethereum", balance: 0.24, icon: "🟣" },
-  { id: "matic", name: "MATIC", chain: "polygon", balance: 67.8, icon: "🟪" },
-  { id: "avax", name: "AVAX", chain: "avalanche", balance: 5.7, icon: "🔴" },
-  { id: "bnb", name: "BNB", chain: "binance", balance: 1.2, icon: "🟡" },
   { id: "forge", name: "FORGE", chain: "solana", balance: 231.5, icon: "⚒️" },
   { id: "pixel", name: "PIXEL", chain: "solana", balance: 320.7, icon: "🎯" },
 ];
 
 export function CrossChainSwap() {
   const [fromChain, setFromChain] = useState(CHAINS[0].id);
-  const [toChain, setToChain] = useState(CHAINS[1].id);
+  const [toChain, setToChain] = useState(CHAINS[0].id);
   const [fromToken, setFromToken] = useState(TOKENS[0].id);
-  const [toToken, setToToken] = useState(TOKENS[3].id);
+  const [toToken, setToToken] = useState(TOKENS[1].id);
   const [amount, setAmount] = useState("");
   const [estimatedAmount, setEstimatedAmount] = useState("0");
   const [isSwapping, setIsSwapping] = useState(false);
@@ -50,16 +42,16 @@ export function CrossChainSwap() {
     if (!value || isNaN(parseFloat(value))) return "0";
     
     const fromTokenValue = selectedFromToken?.id === "sol" ? 100 : 
-                           selectedFromToken?.id === "eth" ? 3000 : 
-                           selectedFromToken?.id === "matic" ? 0.8 : 
-                           selectedFromToken?.id === "avax" ? 20 : 
-                           selectedFromToken?.id === "bnb" ? 250 : 1;
+                           selectedFromToken?.id === "dio" ? 5.32 : 
+                           selectedFromToken?.id === "cave" ? 0.0097 : 
+                           selectedFromToken?.id === "forge" ? 0.325 : 
+                           selectedFromToken?.id === "pixel" ? 0.418 : 1;
                            
     const toTokenValue = selectedToToken?.id === "sol" ? 100 : 
-                         selectedToToken?.id === "eth" ? 3000 : 
-                         selectedToToken?.id === "matic" ? 0.8 : 
-                         selectedToToken?.id === "avax" ? 20 : 
-                         selectedToToken?.id === "bnb" ? 250 : 1;
+                         selectedToToken?.id === "dio" ? 5.32 : 
+                         selectedToToken?.id === "cave" ? 0.0097 : 
+                         selectedToToken?.id === "forge" ? 0.325 : 
+                         selectedToToken?.id === "pixel" ? 0.418 : 1;
     
     const ratio = toTokenValue / fromTokenValue;
     return (parseFloat(value) * ratio).toFixed(6);
@@ -72,19 +64,23 @@ export function CrossChainSwap() {
     setEstimatedAmount(calculateEstimate(value));
   };
   
-  // Handle chain and token changes
-  const handleFromChainChange = (value) => {
-    setFromChain(value);
-    // Set first token from the selected chain
-    const firstToken = TOKENS.find(t => t.chain === value);
-    if (firstToken) setFromToken(firstToken.id);
+  // Handle token changes
+  const handleFromTokenChange = (value) => {
+    setFromToken(value);
+    // Don't allow same token for from and to
+    if (value === toToken) {
+      const differentToken = TOKENS.find(t => t.id !== value);
+      if (differentToken) setToToken(differentToken.id);
+    }
   };
   
-  const handleToChainChange = (value) => {
-    setToChain(value);
-    // Set first token from the selected chain
-    const firstToken = TOKENS.find(t => t.chain === value);
-    if (firstToken) setToToken(firstToken.id);
+  const handleToTokenChange = (value) => {
+    setToToken(value);
+    // Don't allow same token for from and to
+    if (value === fromToken) {
+      const differentToken = TOKENS.find(t => t.id !== value);
+      if (differentToken) setFromToken(differentToken.id);
+    }
   };
   
   // Swap function
@@ -110,10 +106,8 @@ export function CrossChainSwap() {
     }, 2000);
   };
   
-  // Switch chains and tokens
+  // Switch tokens
   const handleSwitchDirections = () => {
-    setFromChain(toChain);
-    setToChain(fromChain);
     setFromToken(toToken);
     setToToken(fromToken);
     setAmount("");
@@ -123,7 +117,7 @@ export function CrossChainSwap() {
   return (
     <Card className="bg-black/20 backdrop-blur-sm border border-white/10 p-6">
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-white">Cross-Chain Swap</h2>
+        <h2 className="text-2xl font-bold text-white">Solana Token Swap</h2>
         
         {/* From Section */}
         <div className="space-y-2">
@@ -134,24 +128,8 @@ export function CrossChainSwap() {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-            <Select value={fromChain} onValueChange={handleFromChainChange}>
-              <SelectTrigger className="bg-black/40 border-white/10">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-dexplay-darkPurple border-white/10">
-                {CHAINS.map((chain) => (
-                  <SelectItem key={chain.id} value={chain.id}>
-                    <div className="flex items-center gap-2">
-                      <span>{chain.icon}</span>
-                      <span>{chain.name}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            <Select value={fromToken} onValueChange={setFromToken}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Select value={fromToken} onValueChange={handleFromTokenChange}>
               <SelectTrigger className="bg-black/40 border-white/10">
                 <SelectValue />
               </SelectTrigger>
@@ -211,24 +189,8 @@ export function CrossChainSwap() {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-            <Select value={toChain} onValueChange={handleToChainChange}>
-              <SelectTrigger className="bg-black/40 border-white/10">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-dexplay-darkPurple border-white/10">
-                {CHAINS.map((chain) => (
-                  <SelectItem key={chain.id} value={chain.id}>
-                    <div className="flex items-center gap-2">
-                      <span>{chain.icon}</span>
-                      <span>{chain.name}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            <Select value={toToken} onValueChange={setToToken}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Select value={toToken} onValueChange={handleToTokenChange}>
               <SelectTrigger className="bg-black/40 border-white/10">
                 <SelectValue />
               </SelectTrigger>
@@ -259,16 +221,16 @@ export function CrossChainSwap() {
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Exchange Rate</span>
             <span className="text-white">
-              1 {selectedFromToken?.name} ≈ {(parseFloat(estimatedAmount) / parseFloat(amount || "1")).toFixed(6)} {selectedToToken?.name}
+              1 {selectedFromToken?.name} ≈ {parseFloat(amount) > 0 ? (parseFloat(estimatedAmount) / parseFloat(amount)).toFixed(6) : "0.000000"} {selectedToToken?.name}
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Network Fee</span>
-            <span className="text-white">0.005 {fromChain === "solana" ? "SOL" : fromChain === "ethereum" ? "ETH" : "NATIVE"}</span>
+            <span className="text-white">0.005 SOL</span>
           </div>
           <div className="flex justify-between text-sm font-medium">
             <span className="text-gray-400">Estimated Time</span>
-            <span className="text-white">~2 minutes</span>
+            <span className="text-white">~2 seconds</span>
           </div>
         </div>
         
