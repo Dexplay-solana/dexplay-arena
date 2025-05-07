@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MainNavbar } from "@/components/MainNavbar";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
@@ -139,140 +138,40 @@ export default function Dashboard() {
               ))}
             </motion.div>
 
-            {/* Charts and Recent Streams */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-              <motion.div variants={fadeIn} className="lg:col-span-2">
-                <Card className="bg-black/20 backdrop-blur-sm border border-white/10 h-full">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2 pt-6 px-6">
-                    <CardTitle className="text-lg text-white">Earnings Overview</CardTitle>
-                    <LineChart className="h-5 w-5 text-gray-400" />
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="h-[300px] flex items-center justify-center">
-                      <div className="w-full h-full relative">
-                        {/* Chart placeholder - would use recharts here */}
-                        <div className="absolute bottom-0 left-0 w-full">
-                          <div className="flex justify-between">
-                            <div className="h-[180px] w-8 bg-gradient-to-t from-dexplay-purple to-transparent rounded-sm"></div>
-                            <div className="h-[120px] w-8 bg-gradient-to-t from-dexplay-purple to-transparent rounded-sm"></div>
-                            <div className="h-[220px] w-8 bg-gradient-to-t from-dexplay-purple to-transparent rounded-sm"></div>
-                            <div className="h-[140px] w-8 bg-gradient-to-t from-dexplay-purple to-transparent rounded-sm"></div>
-                            <div className="h-[190px] w-8 bg-gradient-to-t from-dexplay-purple to-transparent rounded-sm"></div>
-                            <div className="h-[240px] w-8 bg-gradient-to-t from-dexplay-purple to-transparent rounded-sm"></div>
-                            <div className="h-[160px] w-8 bg-gradient-to-t from-dexplay-purple to-transparent rounded-sm"></div>
-                          </div>
-                          <div className="flex justify-between text-xs text-gray-400 mt-2">
-                            <div>Apr 28</div>
-                            <div>Apr 29</div>
-                            <div>Apr 30</div>
-                            <div>May 1</div>
-                            <div>May 2</div>
-                            <div>May 3</div>
-                            <div>May 4</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-              
-              <motion.div variants={fadeIn}>
-                <Card className="bg-black/20 backdrop-blur-sm border border-white/10 h-full">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2 pt-6 px-6">
-                    <CardTitle className="text-lg text-white">Recent Streams</CardTitle>
-                    <Gamepad2 className="h-5 w-5 text-gray-400" />
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      {recentStreams.map((stream) => (
-                        <div key={stream.id} className="border-b border-white/10 pb-4 last:border-0 last:pb-0">
-                          <div className="flex justify-between items-start mb-1">
-                            <div className="text-white font-medium truncate max-w-[70%]">{stream.title}</div>
-                            <div className="text-gray-400 text-xs">{stream.date}</div>
-                          </div>
-                          <div className="flex justify-between text-sm">
-                            <div className="flex items-center text-gray-400">
-                              <Users className="h-3 w-3 mr-1" />
-                              {stream.viewers.toLocaleString()}
-                            </div>
-                            <div className="text-dexplay-purple font-medium">{stream.earnings} SOL</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </div>
-
-            {/* Audience Insights */}
-            <motion.div variants={fadeIn}>
-              <Card className="bg-black/20 backdrop-blur-sm border border-white/10 mb-8">
+            {/* Recent Streams only - Removed Earnings Overview chart */}
+            <motion.div variants={fadeIn} className="mb-8">
+              <Card className="bg-black/20 backdrop-blur-sm border border-white/10 h-full">
                 <CardHeader className="flex flex-row items-center justify-between pb-2 pt-6 px-6">
-                  <CardTitle className="text-lg text-white">Audience Insights</CardTitle>
-                  <Users className="h-5 w-5 text-gray-400" />
+                  <CardTitle className="text-lg text-white">Recent Streams</CardTitle>
+                  <Gamepad2 className="h-5 w-5 text-gray-400" />
                 </CardHeader>
                 <CardContent className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-400">Age Group</span>
-                        <span className="text-xs text-white">18-24</span>
+                  <div className="space-y-4">
+                    {recentStreams.map((stream) => (
+                      <div key={stream.id} className="border-b border-white/10 pb-4 last:border-0 last:pb-0">
+                        <div className="flex justify-between items-start mb-1">
+                          <div className="text-white font-medium truncate max-w-[70%]">{stream.title}</div>
+                          <div className="text-gray-400 text-xs">{stream.date}</div>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <div className="flex items-center text-gray-400">
+                            <Users className="h-3 w-3 mr-1" />
+                            {stream.viewers.toLocaleString()}
+                          </div>
+                          <div className="text-dexplay-purple font-medium">{stream.earnings} SOL</div>
+                        </div>
                       </div>
-                      <Progress value={65} className="h-2 bg-white/10" indicatorClassName="bg-dexplay-purple" />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>25-34: 22%</span>
-                        <span>35+: 13%</span>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-400">Platform</span>
-                        <span className="text-xs text-white">Mobile</span>
-                      </div>
-                      <Progress value={58} className="h-2 bg-white/10" indicatorClassName="bg-dexplay-purple" />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>Desktop: 32%</span>
-                        <span>Tablet: 10%</span>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-400">Watch Time</span>
-                        <span className="text-xs text-white">15-30 mins</span>
-                      </div>
-                      <Progress value={42} className="h-2 bg-white/10" indicatorClassName="bg-dexplay-purple" />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>0-15 mins: 38%</span>
-                        <span>30+ mins: 20%</span>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-400">Engagement</span>
-                        <span className="text-xs text-white">Comments</span>
-                      </div>
-                      <Progress value={70} className="h-2 bg-white/10" indicatorClassName="bg-dexplay-purple" />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>Likes: 20%</span>
-                        <span>Shares: 10%</span>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
 
-            {/* Actions */}
+            {/* Actions - Removed Upload Content button */}
             <motion.div variants={fadeIn} className="flex flex-wrap gap-4">
               <Button className="bg-dexplay-purple hover:bg-dexplay-brightPurple text-white">
                 <Upload className="h-4 w-4 mr-2" />
                 Start New Stream
-              </Button>
-              <Button variant="outline" className="border-dexplay-purple text-dexplay-purple hover:bg-dexplay-purple/20">
-                <ImageIcon className="h-4 w-4 mr-2" />
-                Upload Content
               </Button>
             </motion.div>
           </motion.div>
