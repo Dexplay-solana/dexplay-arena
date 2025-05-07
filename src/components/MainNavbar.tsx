@@ -53,10 +53,12 @@ export function MainNavbar() {
             <Button variant="outline" className="hidden sm:flex border-dexplay-purple text-dexplay-purple hover:bg-dexplay-purple/20">
               Connect Wallet
             </Button>
-            <Button variant="default" className="hidden sm:flex bg-dexplay-purple hover:bg-dexplay-brightPurple text-white" as={Link} to="/dashboard">
-              <BarChart className="mr-2 h-4 w-4" />
-              Dashboard
-            </Button>
+            <Link to="/dashboard">
+              <Button variant="default" className="hidden sm:flex bg-dexplay-purple hover:bg-dexplay-brightPurple text-white">
+                <BarChart className="mr-2 h-4 w-4" />
+                Dashboard
+              </Button>
+            </Link>
             
             {/* Mobile menu button */}
             <Button 
@@ -97,10 +99,12 @@ export function MainNavbar() {
               <Button variant="outline" className="border-dexplay-purple text-dexplay-purple hover:bg-dexplay-purple/20 w-full">
                 Connect Wallet
               </Button>
-              <Button variant="default" className="bg-dexplay-purple hover:bg-dexplay-brightPurple text-white w-full" as={Link} to="/dashboard">
-                <BarChart className="mr-2 h-4 w-4" />
-                Dashboard
-              </Button>
+              <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="default" className="bg-dexplay-purple hover:bg-dexplay-brightPurple text-white w-full">
+                  <BarChart className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
