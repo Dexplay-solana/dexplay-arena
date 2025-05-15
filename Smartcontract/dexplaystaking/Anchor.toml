@@ -1,0 +1,6 @@
+[programs.localnet]
+dexplay_staking = "51fpiEWoSEmgZHoJnfdZBA5AeaEjphR9C47CCv43Zj7fp4hhEuBz5ZqaDqu6UtpvFwphEAvsGqj8tVd6cjYbBJCF"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
