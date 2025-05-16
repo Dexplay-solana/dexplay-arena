@@ -225,3 +225,54 @@ Conditional trades based on game or stream events
 
 5. Cross-Game NFT Swap Station
 Metaplex metadata enables cross-game NFT swaps, with logic to convert attributes when swapping NFTs between games (e.g., pet NFT in Game A ↔ tool NFT in Game B).
+
+Smartcontract instructions 
+
+cd dexplay_staking
+git init
+git add .
+git commit -m "Initial commit: DexPlay Staking Smart Contract"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/dexplay_staking.git
+git push -u origin main
+
+# DexPlay Staking Smart Contract (Solana + Anchor)
+This program allows users to stake any game token (SPL token) listed on DexPlay, the Solana gaming DEX. It uses Anchor framework.
+## 📁 Structure
+
+
+## 📦 Dependencies
+
+- Anchor CLI
+- Solana CLI
+- Node.js
+- SPL Token CLI
+- @solana/spl-token
+- @coral-xyz/anchor
+
+## 🚀 Test Locally
+
+```bash
+anchor test
+#[account]
+pub struct StakeInfo {
+    pub owner: Pubkey,     // The wallet address of the user staking
+    pub mint: Pubkey,      // The token being staked (must be an SPL token)
+    pub amount: u64,       // Amount of tokens currently staked
+    pub bump: u8,          // Bump seed used for PDA derivation
+}
+Description of Fields
+Field	Type	Description
+owner	Pubkey	The public key of the wallet that owns this staking account
+mint	Pubkey	The mint address of the game token being staked
+amount	u64	The number of tokens currently staked by the user
+bump	u8	A bump seed used to derive the PDA address for StakeInfo to make it unique
+
+PDA Derivation
+The PDA (Program Derived Address) for StakeInfo is derived using:
+let (stake_info_pda, _bump) = Pubkey::find_program_address(
+    &[b"stake", user.key().as_ref(), mint.key().as_ref()],
+    program_id,
+);
+
+
