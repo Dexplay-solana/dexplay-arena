@@ -1,5 +1,15 @@
 https://dexplay-arena.netlify.app/
 
+chart1: https://lucid.app/lucidchart/16c7d99b-e2a3-43a1-8ab4-f05cc6ef623e/edit?view_items=ellee9g0kAA9&invitationId=inv_686bbbe3-af15-406b-be6b-a65730c3f380
+
+chart2: https://lucid.app/lucidchart/7ef07589-a4bf-461a-a202-0b8346ea1136/edit?viewport_loc=-11%2C536%2C1791%2C836%2C0_0&invitationId=inv_f971d5b9-8bf5-406a-93dd-b976fc43e0ac
+
+presentation:  https://docs.google.com/presentation/d/1qnwxVXvH6mEDwb8zd4XpRpP3Ufsjb-qatHggdx_gVQA/edit?usp=sharing
+
+project documentation:  https://docs.google.com/document/d/1cM6uf7QXVMRuc-VlpIo_05IhAloUphDsdkFX6_xqJ08/edit?usp=sharing
+
+
+
  Overview Statement
 DexPlay is a decentralized Web3 platform built on the Solana and Metaplex blockchains that empowers creators to livestream Solana-based games while enabling audiences to engage and earn through native game utility tokens. It also integrates a robust game-token DEX, NFT features, and P2P trading, creating a vibrant, gamified economic ecosystem for gamers, streamers, and traders.
 
